@@ -1,0 +1,80 @@
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class MainActivity extends AppCompatActivity {
+
+    //global variables
+    EditText loginET, login2ET;
+    Button pressBTN;
+
+    SQLiteDatabase loginDB;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //defining the screen's objects
+        loginET = (EditText) findViewById(R.id.idET);
+        login2ET = (EditText) findViewById(R.id.passET);
+        pressBTN = (Button) findViewById(R.id.aBTN);
+
+
+        //create database
+        createDatabase();
+    }
+
+        //defining method createDatabase;
+
+    public void createDatabase() {
+        loginDB = openOrCreateDatabase("logins", Context.MODE_PRIVATE, null);
+
+        //create and insert records to the DB table
+        //create a SQL string command
+        String SQLcreate = "create table if not exists logins_table(login varchar(10) not null unique on" +
+                " conflict replace, password varchar(10))";
+
+        //running the above SQL create command
+        loginDB.execSQL(SQLcreate);
+    }
+
+    //defining the method populatedata
+    public void populateData() {
+        //create SQLinsert command for each login
+        String SQLinsert0 = "insert into logins_table values('Liliy','1234')";
+
+        //run the above SQL insert commands
+        loginDB.execSQL(SQLinsert0);
+
+        //checking info
+
+        //setting up listener to the aBTN;
+        pressBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //reading the inputs
+                String idET = loginET.getText().toString();
+                Double passET = Double.parseDouble(login2ET.getText().toString());
+            }
+        });
+
+
+        if ( loginET.equals("Liliy") && login2ET.equals("1234")) {
+
+            System.out.println("Welcome Liliy!");
+
+        } else {
+
+        }
+            System.out.println("Wrong info");
+
+        }
+
+
+    }
+
